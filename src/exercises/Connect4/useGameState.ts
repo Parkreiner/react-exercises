@@ -7,15 +7,15 @@ const BOARD_HEIGHT = 6;
 type BoardStatus = "idle" | "pieceFalling" | "redWins" | "yellowWins" | "tie";
 type Board = readonly (readonly BoardSpace[])[];
 
-type GameState = {
+type GameState = Readonly<{
   board: Board;
   status: BoardStatus;
   activePlayer: PlayerPiece;
-  activeCellIndices: null | {
+  activeCellIndices: null | Readonly<{
     row: number;
     column: number;
-  };
-};
+  }>;
+}>;
 
 type GameAction =
   | { type: "columnSelected"; payload: { columnIndex: number } }
