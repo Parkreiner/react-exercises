@@ -36,20 +36,17 @@ export default function Connect4() {
   return (
     <div className="h-full flex justify-center items-center flex-col">
       <div>
-        {topRow?.map((_, columnIndex) => {
-          const columnIsFull = state.board.every((row) => {
-            return row[columnIndex] !== "empty";
-          });
-
-          return (
-            <DropperButton
-              key={columnIndex}
-              activePlayer={state.activePlayer}
-              disabled={gameOver || columnIsFull}
-              onClick={() => updaters.selectColumn(columnIndex)}
-            />
-          );
-        })}
+        {topRow?.map((_, columnIndex) => (
+          <DropperButton
+            key={columnIndex}
+            activePlayer={state.activePlayer}
+            onClick={() => updaters.selectColumn(columnIndex)}
+            disabled={
+              gameOver ||
+              state.board.every((row) => row[columnIndex] !== "empty")
+            }
+          />
+        ))}
       </div>
 
       <table className="border-spacing-0 rounded-lg bg-blue-700 p-1 block">
