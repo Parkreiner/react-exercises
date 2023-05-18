@@ -1,9 +1,22 @@
 import { useEffect } from "react";
-import { pieceBackgroundColors } from "./typesConstants";
+import { cva } from "class-variance-authority";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+
+import { BoardSpace } from "./typesConstants";
 import useGameState from "./useGameState";
 import DropperButton from "./DropperButton";
 
 const ANIMATION_DELAY_MS = 50;
+
+const pieceStyles = cva("rounded-full w-full h-full", {
+  variants: {
+    cellContent: {
+      red: "bg-red-700",
+      yellow: "bg-yellow-400",
+      empty: "bg-white",
+    } satisfies Record<BoardSpace, string>,
+  },
+});
 
 export default function Connect4() {
   const { state, updaters } = useGameState();
@@ -21,43 +34,39 @@ export default function Connect4() {
     state.status === "tie";
 
   return (
-    <div className="App">
-      {topRow?.map((topRowCell, columnIndex) => (
-        <DropperButton
-          key={columnIndex}
-          activePlayer={state.activePlayer}
-          disabled={gameOver || topRowCell !== "empty"}
-          onClick={() => updaters.selectColumn(columnIndex)}
-        />
-      ))}
+    <div className="h-full flex justify-center items-center flex-col">
+      <div>
+        {topRow?.map((_, columnIndex) => {
+          const columnIsFull = state.board.every((row) => {
+            return row[columnIndex] !== "empty";
+          });
 
-      <table
-        style={{
-          borderSpacing: "0",
-          backgroundColor: "hsl(245deg, 50%, 45%)",
-          borderRadius: "8px",
-        }}
-      >
+          return (
+            <DropperButton
+              key={columnIndex}
+              activePlayer={state.activePlayer}
+              disabled={gameOver || columnIsFull}
+              onClick={() => updaters.selectColumn(columnIndex)}
+            />
+          );
+        })}
+      </div>
+
+      <table className="border-spacing-0 rounded-lg bg-blue-700 p-1 block">
         <tbody>
           {state.board.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {row.map((cell, columnIndex) => (
+              {row.map((cellContent, columnIndex) => (
                 <td
                   key={columnIndex}
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    padding: "4px",
-                  }}
+                  className="w-[50px] h-[50px] p-1"
+                  aria-live="polite"
                 >
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "9999px",
-                      backgroundColor: pieceBackgroundColors[cell],
-                    }}
-                  />
+                  <VisuallyHidden.Root>
+                    The space at row {rowIndex + 1}, column {columnIndex + 1} is{" "}
+                    {cellContent}.
+                  </VisuallyHidden.Root>
+                  <div className={pieceStyles({ cellContent })} />
                 </td>
               ))}
             </tr>
@@ -66,17 +75,21 @@ export default function Connect4() {
       </table>
 
       {gameOver && (
-        <>
-          <p>
+        <div className="text-center">
+          <p className="pt-4">
             {state.status === "tie" && "Tie!"}
             {state.status === "redWins" && "Red player wins!"}
             {state.status === "yellowWins" && "Yellow player wins!"}
           </p>
 
-          <button type="button" onClick={updaters.resetGame}>
+          <button
+            type="button"
+            className="bg-gray-200 py-4 px-8 rounded-full mt-2 hover:bg-gray-300 transition-colors"
+            onClick={updaters.resetGame}
+          >
             Play again
           </button>
-        </>
+        </div>
       )}
     </div>
   );
