@@ -54,11 +54,7 @@ export default function Connect4() {
           {state.board.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cellContent, columnIndex) => (
-                <td
-                  key={columnIndex}
-                  className="w-[50px] h-[50px] p-1"
-                  aria-live="polite"
-                >
+                <td key={columnIndex} className="w-[50px] h-[50px] p-1">
                   <VisuallyHidden.Root>
                     The space at row {rowIndex + 1}, column {columnIndex + 1} is{" "}
                     {cellContent}.
