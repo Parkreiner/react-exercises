@@ -87,16 +87,16 @@ function determineWinner(board: Board): PlayerPiece | null {
   }
 
   // Scan diagonals going top-left to bottom-right
-  for (let i = 0; i <= board.length - 4; i++) {
-    for (let j = 0; j <= (board[0]?.length ?? 0) - 4; j++) {
-      const head = board[i]?.[j];
+  for (let y = 0; y <= board.length - 4; y++) {
+    for (let x = 0; x <= (board[0]?.length ?? 0) - 4; x++) {
+      const head = board[y]?.[x];
       if (head === undefined || head === "empty") {
         continue;
       }
 
       const diagonalSegment: (BoardSpace | undefined)[] = [];
       for (let offset = 0; offset < 4; offset++) {
-        const newSpace = board[i + offset]?.[j + offset];
+        const newSpace = board[y + offset]?.[x + offset];
         diagonalSegment.push(newSpace);
       }
 

@@ -56,7 +56,7 @@ export default function Connect4() {
               {row.map((cellContent, columnIndex) => (
                 <td key={columnIndex} className="w-[50px] h-[50px] p-1">
                   <VisuallyHidden.Root>
-                    The space at row {rowIndex + 1}, column {columnIndex + 1} is{" "}
+                    The space at column {columnIndex + 1}, row {rowIndex + 1} is{" "}
                     {cellContent}.
                   </VisuallyHidden.Root>
                   <div className={pieceStyles({ cellContent })} />
