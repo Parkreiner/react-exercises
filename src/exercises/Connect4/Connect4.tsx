@@ -67,23 +67,26 @@ export default function Connect4() {
         </tbody>
       </table>
 
-      {gameOver && (
-        <div className="text-center">
-          <p className="pt-4">
-            {state.status === "tie" && "Tie!"}
-            {state.status === "redWins" && "Red player wins!"}
-            {state.status === "yellowWins" && "Yellow player wins!"}
-          </p>
+      {/*
+         Not conditionally rendering this div to prevent layout reflows once the
+         game ends
+      */}
+      <div className="text-center" style={{ opacity: gameOver ? 1 : 0 }}>
+        <p className="mt-4 min-h-[1rem] leading-none">
+          {state.status === "tie" && "Tie!"}
+          {state.status === "redWins" && "Red player wins!"}
+          {state.status === "yellowWins" && "Yellow player wins!"}
+        </p>
 
-          <button
-            type="button"
-            className="bg-gray-200 py-4 px-8 rounded-full mt-2 hover:bg-gray-300 transition-colors"
-            onClick={updaters.resetGame}
-          >
-            Play again
-          </button>
-        </div>
-      )}
+        <button
+          type="button"
+          className="bg-gray-200 py-4 px-8 rounded-full mt-4 hover:bg-gray-300 transition-colors"
+          disabled={!gameOver}
+          onClick={updaters.resetGame}
+        >
+          Play again
+        </button>
+      </div>
     </div>
   );
 }
