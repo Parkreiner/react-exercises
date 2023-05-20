@@ -39,7 +39,13 @@ export default function ConnectFour() {
     <main className="h-full flex justify-center items-center flex-col">
       <section className="mb-4 text-center">
         <h1 className="font-bold">Connect Four</h1>
-        <p id={turnInfoId}>
+
+        <p id={turnInfoId} className="flex flex-row items-center gap-1">
+          <div
+            className={`w-3 h-3 rounded-full border-black border-2 ${
+              state.activePlayer === "red" ? "bg-red-600" : "bg-yellow-300"
+            }`}
+          />
           {state.activePlayer === "red" ? "Red" : "Yellow"} player&apos;s turn
         </p>
       </section>
@@ -58,12 +64,15 @@ export default function ConnectFour() {
         ))}
       </section>
 
-      <table aria-labelledby={turnInfoId}>
+      <table>
         <caption>
           <VisuallyHidden.Root>Current Board</VisuallyHidden.Root>
         </caption>
 
-        <tbody className="border-spacing-0 rounded-lg bg-blue-700 p-1 block">
+        <tbody
+          aria-labelledby={turnInfoId}
+          className="border-spacing-0 rounded-lg bg-blue-700 p-1 block"
+        >
           {state.board.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cellContent, columnIndex) => (
