@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { PlayerPiece } from "./typesConstants";
 
 type Props = {
-  fillColor: PlayerPiece;
+  hoverFillColor: PlayerPiece;
   disabled: boolean;
   onClick: () => void;
 };
@@ -15,7 +15,7 @@ const pieceStyles = cva("w-full h-full rounded-full border-dotted border-2", {
       false: "border-black",
     },
 
-    fillColor: {
+    hoverFillColor: {
       red: "",
       yellow: "",
     } satisfies Record<PlayerPiece, string>,
@@ -30,19 +30,23 @@ const pieceStyles = cva("w-full h-full rounded-full border-dotted border-2", {
     {
       hovered: true,
       disabled: false,
-      fillColor: "red",
+      hoverFillColor: "red",
       class: "bg-red-700",
     },
     {
       hovered: true,
       disabled: false,
-      fillColor: "yellow",
+      hoverFillColor: "yellow",
       class: "bg-yellow-400",
     },
   ],
 });
 
-export default function DropperButton({ fillColor, disabled, onClick }: Props) {
+export default function DropperButton({
+  hoverFillColor,
+  disabled,
+  onClick,
+}: Props) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -56,7 +60,7 @@ export default function DropperButton({ fillColor, disabled, onClick }: Props) {
         disabled ? "default" : "pointer"
       }`}
     >
-      <div className={pieceStyles({ hovered, fillColor, disabled })} />
+      <div className={pieceStyles({ hovered, hoverFillColor, disabled })} />
     </button>
   );
 }

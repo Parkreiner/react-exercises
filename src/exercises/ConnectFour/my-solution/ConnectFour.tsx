@@ -28,7 +28,7 @@ export default function ConnectFour() {
     return () => window.clearTimeout(timeoutId);
   }, [state.board, state.status, updaters.nextTick]);
 
-  const turnInfoId = `turn-info-${hookId}`;
+  const announcementAreaId = `announcement-${hookId}`;
   const topRow = state.board[0];
   const gameOver =
     state.status === "redWins" ||
@@ -37,24 +37,13 @@ export default function ConnectFour() {
 
   return (
     <main className="h-full flex justify-center items-center flex-col">
-      <section className="mb-4 text-center">
-        <h1 className="font-bold">Connect Four</h1>
+      <h1 className="font-bold">Connect Four</h1>
 
-        <p id={turnInfoId} className="flex flex-row items-center gap-1">
-          <div
-            className={`w-3 h-3 rounded-full border-black border-2 ${
-              state.activePlayer === "red" ? "bg-red-600" : "bg-yellow-300"
-            }`}
-          />
-          {state.activePlayer === "red" ? "Red" : "Yellow"} player&apos;s turn
-        </p>
-      </section>
-
-      <section role="group" className="px-2">
+      <section role="group" className="px-2 mt-2.5">
         {topRow?.map((_, columnIndex) => (
           <DropperButton
             key={columnIndex}
-            fillColor={state.activePlayer}
+            hoverFillColor={state.activePlayer}
             onClick={() => updaters.selectColumn(columnIndex)}
             disabled={
               gameOver ||
@@ -70,7 +59,7 @@ export default function ConnectFour() {
         </caption>
 
         <tbody
-          aria-labelledby={turnInfoId}
+          aria-labelledby={announcementAreaId}
           className="border-spacing-0 rounded-lg bg-blue-700 p-1 block"
         >
           {state.board.map((row, rowIndex) => (
@@ -89,22 +78,38 @@ export default function ConnectFour() {
         </tbody>
       </table>
 
-      {/*
-         Not conditionally rendering this div to prevent layout reflows once the
-         game ends
-      */}
-      <section
-        className={`text-center ${gameOver ? "opacity-100" : "opacity-0"}`}
-      >
-        <p aria-live="polite" className="mt-4 min-h-[1rem] leading-none">
+      <section className="text-center mt-2">
+        <p
+          id={announcementAreaId}
+          aria-live="polite"
+          className="flex flex-row items-center gap-x-1 mt-1 min-h-[1rem] leading-none"
+        >
+          {!gameOver && (
+            <>
+              <div
+                className={`w-3 h-3 rounded-full border-black border-2 ${
+                  state.activePlayer === "red" ? "bg-red-600" : "bg-yellow-300"
+                }`}
+              />
+              {state.activePlayer === "red" ? "Red" : "Yellow"} player&apos;s
+              turn
+            </>
+          )}
+
           {state.status === "tie" && "Tie!"}
           {state.status === "redWins" && "Red player wins!"}
           {state.status === "yellowWins" && "Yellow player wins!"}
         </p>
 
+        {/*
+          Not conditionally rendering button to prevent layout reflows once the
+          game ends
+        */}
         <button
           type="button"
-          className="bg-gray-200 py-4 px-8 rounded-full mt-4 hover:bg-gray-300 transition-colors"
+          className={`bg-gray-200 py-4 px-8 rounded-full mt-4 hover:bg-gray-300 transition-colors ${
+            gameOver ? "opacity-100" : "opacity-0"
+          }`}
           disabled={!gameOver}
           onClick={updaters.resetGame}
         >

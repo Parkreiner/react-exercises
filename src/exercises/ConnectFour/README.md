@@ -37,20 +37,32 @@ Note: To be clear, I did not do any of these. I just thought they'd be interesti
 2. Try to build the app so that it can preemptively figure out when a game is impossible to win, without forcing players to do the busy work of filling the board completely.
 3. Program the game so that users are free to keep dropping pieces while other pieces are already falling.
 4. For even greater accessibility, make sure that the app is fully playable with a keyboard, and even use a screen reader to see what the experience of playing the game would be like for someone who has a sight disability.
+5. Make the board fully responsive.
+   - Hint 1: Because the width of the game will be fluid, you will want to set up something for React to "subscribe" to changes in the width of the pieces, so that it can automatically update their height to match. You don't need an external library for this – the browser API provides a really nice tool.
+   - Hint 2: `useEffect` will be too slow for an update like this, because React will always render the UI incorrectly, run the effect asynchronously to update the state, then update the state to be correct. This will cause a brief UI flicker, which makes things feel janky. Even `useLayoutEffect` might be too slow, if you're not careful about when you call things. Be very careful about **when** you change the height of your elements.
 
 ## Hints
 
-You might learn more from this exercise if you try to solve as much as it on your own as you can.
+Highly recommend that you solve as much of this exercise on your own as you can, but here are some hints:
 
-1. There's nothing stopping you from using as many types of hooks as you want, but the MVP version of this challenge should be solvable with just `useState` and `useEffect`.
-2. It can be helpful to identify what "events" can happen in the game, and how your app's state needs to update itself in response to them. There can be "active" events triggered by the user (e.g., when they click something), but there can also be "passive" events that happen with no user input. Do some events happen only in response to other events happening?
-3. On a similar note, it can be helpful to identify what kinds of "statuses" the game can be in at any given time. What statuses can the game be in while a game is ongoing, and what statuses can it end up in when a game finally ends?
+1. There's nothing stopping you from using as many types of hooks as you want, but the Minimum Viable Product (MVP) version of this challenge should be solvable with just `useState` and `useEffect`.
+2. It can be helpful to identify what "game events" (not browser events) can happen, and how your app's state needs to update itself in response to them. There can be "active" events triggered by the user (e.g., when they click something), but there can also be "passive" events that happen with no user input. What events trigger as a result of another event happening?
+3. On a similar note, it can be helpful to identify what kinds of "statuses" the game can be in at any given time. What statuses can the game be in while a game is ongoing, and what statuses can it have when a game finally ends?
 4. If you are making the pieces fall entirely through JavaScript/React logic (no CSS transforms), ask yourself: what has to change each time a piece falls by a single space? It might be more state than you think.
 5. If you're running into weird behavior when hovering your mouse over the dropper buttons, you might want to research if you're using the right mouse events. There are some mouse events that have very similar names, but different overall behavior.
 6. When making the logic for detecting whether someone has won, it can help to break down the logic for scanning the game board down into discrete "phases". You can start by scanning things horizontally, then vertically, and then eventually build up to scanning things diagonally.
 7. If you do decide to make multiple components for your solution, ask yourself: "what is the bare minimum that this new component cares about?" For example, if you decide to a make a component for the drop button, does it actually care about the game state, or does it just care about things like what fill color it should use, and whether it's disabled? Thinking through the "API contracts" of all your components is something you should be doing in general as a React developer.
 
-## Libraries used in my solution
+## What I used for my solution
+
+### Hooks
+
+- `useReducer`
+- `useEffect`
+- `useId` (not required - just helps with accessibility)
+- `useCallback` (not really necessary, but I use it out of habit for custom hooks)
+
+### Libraries
 
 - Tailwind
 - Class Variance Authority (to simplify mapping state to Tailwind styles)
