@@ -1,5 +1,5 @@
-import Connect4 from "./exercises/Connect4/Connect4";
+import Test from "./exercises/HeaderAccessibility/Test";
 
 export default function App() {
-  return <Connect4 />;
+  return <Test />;
 }
