@@ -1,5 +1,5 @@
-import Test from "./exercises/HeaderAccessibility/Test";
+import ConnectFour from "./exercises/ConnectFour/my-solution";
 
 export default function App() {
-  return <Test />;
+  return <ConnectFour />;
 }

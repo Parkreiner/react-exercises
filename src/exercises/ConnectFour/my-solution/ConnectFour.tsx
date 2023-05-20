@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { cva } from "class-variance-authority";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
@@ -18,7 +18,8 @@ const pieceStyles = cva("rounded-full w-full h-full", {
   },
 });
 
-export default function Connect4() {
+export default function ConnectFour() {
+  const hookId = useId();
   const { state, updaters } = useGameState();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function Connect4() {
     return () => window.clearTimeout(timeoutId);
   }, [state.board, state.status, updaters.nextTick]);
 
+  const turnInfoId = `turn-info-${hookId}`;
   const topRow = state.board[0];
   const gameOver =
     state.status === "redWins" ||
@@ -34,12 +36,19 @@ export default function Connect4() {
     state.status === "tie";
 
   return (
-    <div className="h-full flex justify-center items-center flex-col">
-      <div>
+    <main className="h-full flex justify-center items-center flex-col">
+      <section className="mb-4 text-center">
+        <h1 className="font-bold">Connect Four</h1>
+        <p id={turnInfoId}>
+          {state.activePlayer === "red" ? "Red" : "Yellow"} player&apos;s turn
+        </p>
+      </section>
+
+      <section role="group" className="px-2">
         {topRow?.map((_, columnIndex) => (
           <DropperButton
             key={columnIndex}
-            activePlayer={state.activePlayer}
+            fillColor={state.activePlayer}
             onClick={() => updaters.selectColumn(columnIndex)}
             disabled={
               gameOver ||
@@ -47,10 +56,14 @@ export default function Connect4() {
             }
           />
         ))}
-      </div>
+      </section>
 
-      <table className="border-spacing-0 rounded-lg bg-blue-700 p-1 block">
-        <tbody>
+      <table aria-labelledby={turnInfoId}>
+        <caption>
+          <VisuallyHidden.Root>Current Board</VisuallyHidden.Root>
+        </caption>
+
+        <tbody className="border-spacing-0 rounded-lg bg-blue-700 p-1 block">
           {state.board.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cellContent, columnIndex) => (
@@ -71,8 +84,10 @@ export default function Connect4() {
          Not conditionally rendering this div to prevent layout reflows once the
          game ends
       */}
-      <div className="text-center" style={{ opacity: gameOver ? 1 : 0 }}>
-        <p className="mt-4 min-h-[1rem] leading-none">
+      <section
+        className={`text-center ${gameOver ? "opacity-100" : "opacity-0"}`}
+      >
+        <p aria-live="polite" className="mt-4 min-h-[1rem] leading-none">
           {state.status === "tie" && "Tie!"}
           {state.status === "redWins" && "Red player wins!"}
           {state.status === "yellowWins" && "Yellow player wins!"}
@@ -86,7 +101,7 @@ export default function Connect4() {
         >
           Play again
         </button>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

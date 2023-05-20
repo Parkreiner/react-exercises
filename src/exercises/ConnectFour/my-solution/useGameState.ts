@@ -1,8 +1,10 @@
 import { useCallback, useReducer } from "react";
-import { BoardSpace, PlayerPiece } from "./typesConstants";
-
-const BOARD_WIDTH = 7;
-const BOARD_HEIGHT = 6;
+import {
+  BoardSpace,
+  PlayerPiece,
+  BOARD_HEIGHT,
+  BOARD_WIDTH,
+} from "./typesConstants";
 
 type BoardStatus = "idle" | "pieceFalling" | "redWins" | "yellowWins" | "tie";
 type Board = readonly (readonly BoardSpace[])[];
