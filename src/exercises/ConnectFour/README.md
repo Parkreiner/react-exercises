@@ -57,10 +57,11 @@ Highly recommend that you solve as much of this exercise on your own as you can,
 
 ### Hooks
 
-- `useReducer`
-- `useEffect`
-- `useId` (not required - just helps with accessibility)
-- `useCallback` (not really necessary, but I use it out of habit for custom hooks)
+- `useReducer` - For helping me organize the logic for the core game state better than `useState` would be able to
+- `useState` - For handling simpler UI state that doesn't directly pertain to game state
+- `useEffect` - For handling timeout logic to make "passive" state changes happen over time
+- `useId` - Not required; just helps with accessibility
+- `useCallback` - Not really necessary; I use it out of habit for custom hooks, just to ensure that exported functions maintain stable references
 
 ### Libraries
 
